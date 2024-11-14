@@ -20,19 +20,21 @@ inputs:
     description: "Toolbar color"
     required: false
     default: "#ffffff"
-  baseUrl:
-    description: "Base URL of the app"
+  description:
+    description: "Description of the page"
     required: false
-    default: "/"
+    default: ""
 outputs:
   dist:
     description: "Dist folder"
     value: ${{ steps.dist.outputs.dist }}
 
-
 runs:
   using: "composite"
   steps:
+    - name: Configure GitHub Pages
+      id: configure
+      uses: actions/configure-pages@v5.0.0
     - name: "Install poppler"
       shell: bash
       run: |
@@ -58,13 +60,17 @@ runs:
     - name: "Build site"
       env:
         INPUT_FILE: ${{ inputs.file }}
-        VITE_BASE_URL: ${{ inputs.baseUrl }}
+        VITE_FULL_URL: ${{ steps.configure.outputs.base_url }}
+        VITE_BASE_URL: ${{ steps.configure.outputs.base_path }}
         VITE_APP_TITLE: ${{ inputs.title }}
         VITE_BACKGROUND_COLOR: ${{ inputs.backgroundColor }}
         VITE_TOOLBAR_COLOR: ${{ inputs.toolbarColor }}
+        VITE_DESCRIPTION: ${{ inputs.description }}
       shell: bash
       run: |
         cd ${{ github.action_path }}
+        export VITE_SEO_IMAGE="$(ls -1 public/ | grep page | head -1)"
+        export VITE_SEO_IMAGE_URL="$VITE_FULL_URL/$VITE_SEO_IMAGE"
         export VITE_PAGE_NUMBER="$(ls -1 public/ | wc -l)"
         export VITE_FILE_DOWNLOAD=$(basename "$INPUT_FILE")
         npm run build
