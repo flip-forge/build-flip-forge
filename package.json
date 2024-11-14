@@ -1,0 +1,20 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@flip-forge/vue-flip-forge": "0.1.0",
+    "@vueuse/router": "11.2.0",
+    "vue": "3.5.12",
+    "vue-router": "4.4.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "5.1.4",
+    "vite": "5.4.10"
+  }
+}

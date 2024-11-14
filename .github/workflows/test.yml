@@ -1,0 +1,19 @@
+name: Deploy test
+on:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./
+        with:
+          file: test/lorem_ipsum.pdf
+          title: "LOREM IPSUM"
+      - name: Upload artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist

@@ -1,0 +1,71 @@
+name: "deploy-flip-forge"
+branding:
+  icon: book-open
+  color: purple
+description: "Deploy flip forge on GitHub pages"
+
+inputs:
+  file:
+    description: "PDF file to convert."
+    required: true
+  title:
+    description: "Page title"
+    required: false
+    default: "Flip forge"
+  backgroundColor:
+    description: "Background color"
+    required: false
+    default: "#000000"
+  toolbarColor:
+    description: "Toolbar color"
+    required: false
+    default: "#ffffff"
+  baseUrl:
+    description: "Base URL of the app"
+    required: false
+    default: "/"
+outputs:
+  dist:
+    description: "Dist folder"
+    value: ${{ steps.dist.outputs.dist }}
+
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Install poppler"
+      shell: bash
+      run: |
+        sudo apt update -y
+        sudo apt install -y poppler-utils
+    - uses: actions/setup-node@v4
+      with:
+        node-version: "20.x"
+        cache: "npm"
+    - name: "Install dependencies"
+      run: |
+        npm ci
+    - name: "Convert to images"
+      shell: bash
+      env:
+        INPUT_FILE: ${{ inputs.file }}
+      run: |
+        mkdir public
+        cp "$INPUT_FILE" public/
+        pdftocairo "$INPUT_FILE" -jpeg public/page
+    - name: "Build site"
+      env:
+        INPUT_FILE: ${{ inputs.file }}
+        VITE_BASE_URL: ${{ inputs.baseUrl }}
+        VITE_APP_TITLE: ${{ inputs.title }}
+        VITE_BACKGROUND_COLOR: ${{ inputs.backgroundColor }}
+        VITE_TOOLBAR_COLOR: ${{ inputs.toolbarColor }}
+      shell: bash
+      run: |
+        export VITE_PAGE_NUMBER="$(ls -1 public/ | wc -l)"
+        export VITE_FILE_DOWNLOAD=$(basename "$INPUT_FILE")
+        npm run build
+    - name: Set dist folder
+      id: dist
+      shell: bash
+      run: echo "dist=$(realpath dist)" >> $GITHUB_OUTPUT
