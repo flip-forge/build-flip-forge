@@ -56,7 +56,7 @@ runs:
       run: |
         mkdir "$PUBLIC_FOLDER_PATH"
         cp "$INPUT_FILE" "$PUBLIC_FOLDER_PATH"
-        pdftocairo "$INPUT_FILE" -jpeg "$PUBLIC_FOLDER_PATH/page"
+        pdftocairo "$INPUT_FILE" -jpeg -jpegopt quality=85 "$PUBLIC_FOLDER_PATH/page"
     - name: "Build site"
       env:
         INPUT_FILE: ${{ inputs.file }}
