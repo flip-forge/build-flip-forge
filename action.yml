@@ -33,11 +33,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Set GitHub Path
-      run: echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
-      shell: bash
-      env:
-        GITHUB_ACTION_PATH: ${{ github.action_path }}
     - name: "Install poppler"
       shell: bash
       run: |
@@ -49,15 +44,17 @@ runs:
     - name: "Install dependencies"
       shell: bash
       run: |
+        cd ${{ github.action_path }}
         npm ci
     - name: "Convert to images"
       env:
         INPUT_FILE: ${{ inputs.file }}
+        PUBLIC_FOLDER_PATH: "${{ github.action_path }}/public/"
       shell: bash
       run: |
-        mkdir public
-        cp "$INPUT_FILE" public/
-        pdftocairo "$INPUT_FILE" -jpeg public/page
+        mkdir "$PUBLIC_FOLDER_PATH"
+        cp "$INPUT_FILE" "$PUBLIC_FOLDER_PATH"
+        pdftocairo "$INPUT_FILE" -jpeg "$PUBLIC_FOLDER_PATH/page"
     - name: "Build site"
       env:
         INPUT_FILE: ${{ inputs.file }}
@@ -67,10 +64,13 @@ runs:
         VITE_TOOLBAR_COLOR: ${{ inputs.toolbarColor }}
       shell: bash
       run: |
+        cd ${{ github.action_path }}
         export VITE_PAGE_NUMBER="$(ls -1 public/ | wc -l)"
         export VITE_FILE_DOWNLOAD=$(basename "$INPUT_FILE")
         npm run build
     - name: Set dist folder
       id: dist
       shell: bash
-      run: echo "dist=$(realpath dist)" >> $GITHUB_OUTPUT
+      run: |
+        cd ${{ github.action_path }}
+        echo "dist=$(realpath dist)" >> $GITHUB_OUTPUT
