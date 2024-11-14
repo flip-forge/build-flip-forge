@@ -46,7 +46,7 @@ export default defineComponent({
       const padSize = String(this.pageNumber).length;
       for (let i = 1; i <= this.pageNumber; i += 1) {
         const pageFile = `page-${String(i).padStart(padSize, "0")}.jpg`;
-        result.push([this.baseUrl, pagefile].join("/"));
+        result.push([this.baseUrl, pageFile].join("/"));
       }
       return result;
     }
