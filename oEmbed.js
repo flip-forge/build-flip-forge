@@ -29,7 +29,7 @@ export default function () {
     },
     writeBundle(options) {
       const dirPath = path.join(options.dir, "services");
-      const destPath = path.join(dirPath, "oembed");
+      const destPath = path.join(dirPath, "oembed.json");
       fs.mkdirSync(dirPath);
       fs.writeFileSync(destPath, JSON.stringify(jsonData, null, 2));
     }
