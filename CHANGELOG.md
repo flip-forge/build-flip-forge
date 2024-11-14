@@ -1,3 +1,9 @@
+## v1.1.0
+
+- Add SEO tag support
+- Add oEmbed support
+- Fix more issues with the deployment
+
 ## v1.0.1
 
 - Fix missing shell
