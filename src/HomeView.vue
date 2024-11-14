@@ -1,5 +1,10 @@
 <template>
-  <flip-forge v-model="page" :pages="pages" :options="options"/>
+  <flip-forge
+    v-model="page"
+    :pages="pages"
+    :options="options"
+    :download-url="download"
+  />
 </template>
 
 <script>
@@ -20,7 +25,7 @@ export default defineComponent({
   },
   computed: {
     pageNumber() {
-      return parseInt(import.meta.env.VITE_PAGE_NUMBER ?? "")
+      return parseInt(import.meta.env.VITE_PAGE_NUMBER ?? "");
     },
     options() {
       return {
@@ -30,14 +35,18 @@ export default defineComponent({
         }
       };
     },
+    baseUrl() {
+      return import.meta.env.BASE_URL.replace(/\/$/, "");
+    },
     download() {
-      return "/" + import.meta.env.VITE_FILE_DOWNLOAD;
+      return [this.baseUrl, import.meta.env.VITE_FILE_DOWNLOAD].join("/");
     },
     pages() {
       const result = [];
       const padSize = String(this.pageNumber).length;
       for (let i = 1; i <= this.pageNumber; i += 1) {
-        result.push(`/page-${String(i).padStart(padSize, "0")}.jpg`);
+        const pageFile = `page-${String(i).padStart(padSize, "0")}.jpg`;
+        result.push([this.baseUrl, pagefile].join("/"));
       }
       return result;
     }
