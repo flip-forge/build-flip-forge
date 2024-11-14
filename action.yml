@@ -69,9 +69,9 @@ runs:
       shell: bash
       run: |
         cd ${{ github.action_path }}
-        export VITE_SEO_IMAGE="$(ls -1 public/ | grep page | head -1)"
+        export VITE_SEO_IMAGE="$(ls -1 public/ | grep .jpg | head -1)"
         export VITE_SEO_IMAGE_URL="$VITE_FULL_URL/$VITE_SEO_IMAGE"
-        export VITE_PAGE_NUMBER="$(ls -1 public/ | wc -l)"
+        export VITE_PAGE_NUMBER="$(ls -1 public/ | grep .jpg | wc -l)"
         export VITE_FILE_DOWNLOAD=$(basename "$INPUT_FILE")
         npm run build
     - name: Set dist folder
