@@ -62,7 +62,7 @@ runs:
         INPUT_FILE: ${{ inputs.file }}
         VITE_FULL_URL: ${{ steps.configure.outputs.base_url }}
         VITE_BASE_URL: ${{ steps.configure.outputs.base_path }}
-        VITE_APP_TITLE: ${{ inputs.title }}
+        VITE_TITLE: ${{ inputs.title }}
         VITE_BACKGROUND_COLOR: ${{ inputs.backgroundColor }}
         VITE_TOOLBAR_COLOR: ${{ inputs.toolbarColor }}
         VITE_DESCRIPTION: ${{ inputs.description }}
@@ -73,6 +73,9 @@ runs:
         export VITE_SEO_IMAGE_URL="$VITE_FULL_URL/$VITE_SEO_IMAGE"
         export VITE_PAGE_NUMBER="$(ls -1 public/ | grep .jpg | wc -l)"
         export VITE_FILE_DOWNLOAD=$(basename "$INPUT_FILE")
+        output=$(identify public/$VITE_SEO_IMAGE)
+        export VITE_SEO_IMAGE_WIDTH=$(echo "$output" | awk '{print $3}' | cut -d'x' -f1)
+        export VITE_SEO_IMAGE_HEIGHT=$(echo "$output" | awk '{print $3}' | cut -d'x' -f2)
         npm run build
     - name: Set dist folder
       id: dist
