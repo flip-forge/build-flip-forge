@@ -7,8 +7,8 @@ const STEPS = JSON.parse(process.env.STEPS ?? "{}");
 const INPUTS = JSON.parse(process.env.INPUTS ?? "{}");
 const GITHUB = JSON.parse(process.env.GITHUB ?? "{}");
 
-function ensureTrailingSlash(str: string): string {
-  return str.endsWith("/") ? str : `${str}/`;
+function removeTrailingSlash(str: string): string {
+  return str.endsWith("/") ? str.slice(0, -1) : str;
 }
 
 function execCommand(command: unknown[], options?: ExecFileSyncOptions) {
@@ -84,11 +84,11 @@ function convertPagetoJPG(pdfPath: string, page: number) {
 function buildSite(pdfInfo: Record<string, string>) {
   const [imgWidth, imgHeight] = getImageSize("public/page-1.jpg");
   const [owner, repo] = (GITHUB.repository ?? "/").split("/");
-  const baseUrl = ensureTrailingSlash(
-    STEPS.configure?.outputs?.base_path || `${repo}/`,
+  const baseUrl = removeTrailingSlash(
+    STEPS.configure?.outputs?.base_path || `/${repo}`,
   );
-  const fullUrl = ensureTrailingSlash(
-    STEPS.configure?.outputs?.base_url || `https://${owner}.github.io/${repo}/`,
+  const fullUrl = removeTrailingSlash(
+    STEPS.configure?.outputs?.base_url || `https://${owner}.github.io/${repo}`,
   );
 
   const env = {
@@ -101,7 +101,7 @@ function buildSite(pdfInfo: Record<string, string>) {
     VITE_PAGE_NUMBER: pdfInfo.pages,
     VITE_FILE_DOWNLOAD: path.basename(INPUTS.file),
     VITE_SEO_IMAGE: "page-1.jpg",
-    VITE_SEO_IMAGE_URL: `${fullUrl}page-1.jpg`,
+    VITE_SEO_IMAGE_URL: `${fullUrl}/page-1.jpg`,
     VITE_SEO_IMAGE_WIDTH: String(imgWidth),
     VITE_SEO_IMAGE_HEIGHT: String(imgHeight),
   };
