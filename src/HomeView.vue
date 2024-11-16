@@ -43,9 +43,8 @@ export default defineComponent({
     },
     pages() {
       const result = [];
-      const padSize = String(this.pageNumber).length;
       for (let i = 1; i <= this.pageNumber; i += 1) {
-        const pageFile = `page-${String(i).padStart(padSize, "0")}.jpg`;
+        const pageFile = `page-${i}.svg`;
         result.push([this.baseUrl, pageFile].join("/"));
       }
       return result;

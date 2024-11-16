@@ -27,13 +27,14 @@ inputs:
 outputs:
   dist:
     description: "Dist folder"
-    value: ${{ steps.dist.outputs.dist }}
+    value: ${{ steps.build.outputs.dist }}
 
 runs:
   using: "composite"
   steps:
     - name: Configure GitHub Pages
       id: configure
+      if: ${{ github.token }}
       uses: actions/configure-pages@v5.0.0
     - name: "Install poppler"
       shell: bash
@@ -48,38 +49,10 @@ runs:
       run: |
         cd ${{ github.action_path }}
         npm ci --omit=optional
-    - name: "Convert to images"
-      env:
-        INPUT_FILE: ${{ inputs.file }}
-        PUBLIC_FOLDER_PATH: "${{ github.action_path }}/public/"
-      shell: bash
-      run: |
-        mkdir "$PUBLIC_FOLDER_PATH"
-        cp "$INPUT_FILE" "$PUBLIC_FOLDER_PATH"
-        pdftocairo "$INPUT_FILE" -jpeg -jpegopt quality=85 "$PUBLIC_FOLDER_PATH/page"
+        npm run build-action
     - name: "Build site"
-      env:
-        INPUT_FILE: ${{ inputs.file }}
-        VITE_FULL_URL: ${{ steps.configure.outputs.base_url }}
-        VITE_BASE_URL: ${{ steps.configure.outputs.base_path }}
-        VITE_TITLE: ${{ inputs.title }}
-        VITE_BACKGROUND_COLOR: ${{ inputs.backgroundColor }}
-        VITE_TOOLBAR_COLOR: ${{ inputs.toolbarColor }}
-        VITE_DESCRIPTION: ${{ inputs.description }}
+      id: build
       shell: bash
       run: |
         cd ${{ github.action_path }}
-        export VITE_SEO_IMAGE="$(ls -1 public/ | grep .jpg | head -1)"
-        export VITE_SEO_IMAGE_URL="$VITE_FULL_URL/$VITE_SEO_IMAGE"
-        export VITE_PAGE_NUMBER="$(ls -1 public/ | grep .jpg | wc -l)"
-        export VITE_FILE_DOWNLOAD=$(basename "$INPUT_FILE")
-        output=$(identify public/$VITE_SEO_IMAGE)
-        export VITE_SEO_IMAGE_WIDTH=$(echo "$output" | awk '{print $3}' | cut -d'x' -f1)
-        export VITE_SEO_IMAGE_HEIGHT=$(echo "$output" | awk '{print $3}' | cut -d'x' -f2)
-        npm run build-only
-    - name: Set dist folder
-      id: dist
-      shell: bash
-      run: |
-        cd ${{ github.action_path }}
-        echo "dist=$(realpath dist)" >> $GITHUB_OUTPUT
+        npm run build-action
