@@ -6,6 +6,7 @@ import oEmbedVitePlugin from "./build/oEmbedVitePlugin";
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: process.env.VITE_BASE_URL ?? "/",
   plugins: [vue(), oEmbedVitePlugin()],
   resolve: {
     alias: {
