@@ -27,7 +27,7 @@ inputs:
 outputs:
   dist:
     description: "Dist folder"
-    value: ${{ steps.build.outputs.dist }}
+    value: ${{ steps.dist.outputs.dist }}
 
 runs:
   using: "composite"
@@ -49,10 +49,19 @@ runs:
       run: |
         cd ${{ github.action_path }}
         npm ci --omit=optional
-        npm run build-action
     - name: "Build site"
       id: build
       shell: bash
+      env:
+        STEPS: ${{ toJSON(steps) }}
+        INPUTS: ${{ toJSON(inputs) }}
+        GITHUB: ${{ toJSON(github) }}
       run: |
         cd ${{ github.action_path }}
         npm run build-action
+    - name: Set dist folder
+      id: dist
+      shell: bash
+      run: |
+        cd ${{ github.action_path }}
+        echo "dist=$(realpath dist)" >> $GITHUB_OUTPUT
