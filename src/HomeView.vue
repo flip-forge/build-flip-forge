@@ -7,7 +7,7 @@
   />
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 import { useRouteQuery } from "@vueuse/router";
 import FlipForge from "@flip-forge/vue-flip-forge";
@@ -19,24 +19,24 @@ export default defineComponent({
     return {
       page: useRouteQuery("page", "0", {
         transform: Number,
-        mode: "push"
-      })
+        mode: "push",
+      }),
     };
   },
   computed: {
     pageNumber() {
-      return parseInt(import.meta.env.VITE_PAGE_NUMBER ?? "");
+      return parseInt(import.meta.env.VITE_PAGE_NUMBER ?? "", 10);
     },
     options() {
       return {
         theme: {
           "--background": import.meta.env.VITE_BACKGROUND_COLOR,
-          "--toolbarColor": import.meta.env.VITE_TOOLBAR_COLOR
-        }
+          "--toolbarColor": import.meta.env.VITE_TOOLBAR_COLOR,
+        },
       };
     },
     baseUrl() {
-      return import.meta.env.BASE_URL.replace(/\/$/, "");
+      return import.meta.env.BASE_URL.replace(/\/$/u, "");
     },
     download() {
       return [this.baseUrl, import.meta.env.VITE_FILE_DOWNLOAD].join("/");
@@ -49,7 +49,7 @@ export default defineComponent({
         result.push([this.baseUrl, pageFile].join("/"));
       }
       return result;
-    }
-  }
+    },
+  },
 });
 </script>

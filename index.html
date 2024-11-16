@@ -1,35 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>%VITE_TITLE%</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>%VITE_TITLE%</title>
 
-  <link
-    rel="alternate" type="application/json+oembed"
-    href="%VITE_FULL_URL%/services/oembed.json"
-    title="%VITE_TITLE%"
-  />
+    <link
+      rel="alternate"
+      type="application/json+oembed"
+      href="%VITE_FULL_URL%/services/oembed.json"
+      title="%VITE_TITLE%"
+    />
 
-  <meta name="description" content="%VITE_DESCRIPTION%"/>
-  <meta name="twitter:description" content="%VITE_DESCRIPTION%"/>
-  <meta property="og:description" content="%VITE_DESCRIPTION%"/>
+    <meta name="description" content="%VITE_DESCRIPTION%" />
+    <meta name="twitter:description" content="%VITE_DESCRIPTION%" />
+    <meta property="og:description" content="%VITE_DESCRIPTION%" />
 
-  <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="%VITE_TITLE%"/>
-  <meta property="twitter:url" content="%VITE_FULL_URL%"/>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="%VITE_TITLE%" />
+    <meta property="twitter:url" content="%VITE_FULL_URL%" />
 
-  <meta property="og:type" content="article"/>
-  <meta property="og:title" content="%VITE_TITLE%"/>
-  <meta property="og:url" content="%VITE_FULL_URL%"/>
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="%VITE_TITLE%" />
+    <meta property="og:url" content="%VITE_FULL_URL%" />
 
-  <meta name="twitter:image" content="%VITE_SEO_IMAGE_URL%"/>
-  <meta property="og:image" content="%VITE_SEO_IMAGE_URL%"/>
-  <meta property="og:image:width" content="%VITE_SEO_IMAGE_WIDTH%"/>
-  <meta property="og:image:height" content="%VITE_SEO_IMAGE_HEIGHT%"/>
-</head>
-<body style="background-color: %VITE_BACKGROUND_COLOR%">
-<div id="app"></div>
-<script type="module" src="/src/main.js"></script>
-</body>
+    <meta name="twitter:image" content="%VITE_SEO_IMAGE_URL%" />
+    <meta property="og:image" content="%VITE_SEO_IMAGE_URL%" />
+    <meta property="og:image:width" content="%VITE_SEO_IMAGE_WIDTH%" />
+    <meta property="og:image:height" content="%VITE_SEO_IMAGE_HEIGHT%" />
+  </head>
+  <body style="background-color: %VITE_BACKGROUND_COLOR%">
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>
