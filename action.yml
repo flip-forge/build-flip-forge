@@ -47,7 +47,7 @@ runs:
       shell: bash
       run: |
         cd ${{ github.action_path }}
-        npm ci
+        npm ci --omit=optional
     - name: "Convert to images"
       env:
         INPUT_FILE: ${{ inputs.file }}
@@ -76,7 +76,7 @@ runs:
         output=$(identify public/$VITE_SEO_IMAGE)
         export VITE_SEO_IMAGE_WIDTH=$(echo "$output" | awk '{print $3}' | cut -d'x' -f1)
         export VITE_SEO_IMAGE_HEIGHT=$(echo "$output" | awk '{print $3}' | cut -d'x' -f2)
-        npm run build
+        npm run build-only
     - name: Set dist folder
       id: dist
       shell: bash

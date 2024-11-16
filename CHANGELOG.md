@@ -1,3 +1,7 @@
+## v1.2.0
+
+- Add typescript
+
 ## v1.1.0
 
 - Add SEO tag support
