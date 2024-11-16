@@ -44,6 +44,7 @@ function getPdfInfo(pdfPath: string): Record<string, string> {
 }
 
 function getImageSize(imgPath: string): [number, number] {
+  console.log("Getting image size:");
   const output = execCommand(["identify", "-format", "%wx%h", imgPath]);
   const [width, height] = output.toString().split("x").map(Number);
   return [width, height];
@@ -91,7 +92,6 @@ function buildSite(pdfInfo: Record<string, string>) {
   );
 
   const env = {
-    ...process.env,
     VITE_BASE_URL: baseUrl,
     VITE_FULL_URL: fullUrl,
     VITE_TITLE: INPUTS.title || pdfInfo.title || "Flipbook",
@@ -106,7 +106,13 @@ function buildSite(pdfInfo: Record<string, string>) {
     VITE_SEO_IMAGE_HEIGHT: String(imgHeight),
   };
 
-  execCommand(["npm", "run", "build-only"], { env });
+  console.log("Building app with env:", env);
+  execCommand(["npm", "run", "build-only"], {
+    env: {
+      ...process.env,
+      ...env,
+    },
+  });
 }
 
 function main(): void {
