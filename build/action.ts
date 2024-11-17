@@ -80,7 +80,7 @@ function convertPageToJPG(pdfPath: string, page: number) {
     "-jpegopt",
     "quality=60,progressive=y,optimize=y",
     "-r",
-    20,
+    54,
     "-singlefile",
     pdfPath,
     `public/jpg/${page}`,
@@ -106,7 +106,8 @@ function extractSEOImage(pdfPath: string) {
 }
 
 function buildSite(pdfInfo: Record<string, string>) {
-  const [imgWidth, imgHeight] = getImageSize("public/cover.jpg");
+  const [seoImgWidth, seoImgHeight] = getImageSize("public/cover.jpg");
+  const [svgImgWidth, svgImgHeight] = getImageSize("public/svg/1.svg");
   const [owner, repo] = (GITHUB.repository ?? "/").split("/");
   const baseUrl = removeTrailingSlash(
     STEPS.configure?.outputs?.base_path || `/${repo}`,
@@ -126,8 +127,10 @@ function buildSite(pdfInfo: Record<string, string>) {
     VITE_FILE_DOWNLOAD: path.basename(INPUTS.file),
     VITE_SEO_IMAGE: "cover.jpg",
     VITE_SEO_IMAGE_URL: `${fullUrl}/cover.jpg`,
-    VITE_SEO_IMAGE_WIDTH: String(imgWidth),
-    VITE_SEO_IMAGE_HEIGHT: String(imgHeight),
+    VITE_SEO_IMAGE_WIDTH: String(seoImgWidth),
+    VITE_SEO_IMAGE_HEIGHT: String(seoImgHeight),
+    VITE_SVG_IMAGE_WIDTH: String(svgImgWidth),
+    VITE_SVG_IMAGE_HEIGHT: String(svgImgHeight),
   };
 
   console.log("Building app with env:", env);

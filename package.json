@@ -21,7 +21,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@flip-forge/vue-flip-forge": "0.1.0",
+    "@flip-forge/vue-flip-forge": "0.2.0",
     "@vueuse/router": "11.2.0",
     "vue": "3.5.12",
     "vue-router": "4.4.5"
