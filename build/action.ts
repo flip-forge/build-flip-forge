@@ -7,6 +7,12 @@ const STEPS = JSON.parse(process.env.STEPS ?? "{}");
 const INPUTS = JSON.parse(process.env.INPUTS ?? "{}");
 const GITHUB = JSON.parse(process.env.GITHUB ?? "{}");
 
+function mkdir(dirPath: string) {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath);
+  }
+}
+
 function removeTrailingSlash(str: string): string {
   return str.endsWith("/") ? str.slice(0, -1) : str;
 }
@@ -59,11 +65,11 @@ function convertPageToSVG(pdfPath: string, page: number) {
     page,
     "-svg",
     pdfPath,
-    `public/page-${page}.svg`,
+    `public/svg/${page}.svg`,
   ]);
 }
 
-function convertPagetoJPG(pdfPath: string, page: number) {
+function convertPageToJPG(pdfPath: string, page: number) {
   execCommand([
     "pdftocairo",
     "-f",
@@ -73,16 +79,34 @@ function convertPagetoJPG(pdfPath: string, page: number) {
     "-jpeg",
     "-jpegopt",
     "quality=60,progressive=y,optimize=y",
+    "-r",
+    20,
+    "-singlefile",
+    pdfPath,
+    `public/jpg/${page}`,
+  ]);
+}
+
+function extractSEOImage(pdfPath: string) {
+  execCommand([
+    "pdftocairo",
+    "-f",
+    1,
+    "-l",
+    1,
+    "-jpeg",
+    "-jpegopt",
+    "quality=80,progressive=y,optimize=y",
     "-scale-to",
     1024,
     "-singlefile",
     pdfPath,
-    `public/page-${page}`,
+    `public/cover`,
   ]);
 }
 
 function buildSite(pdfInfo: Record<string, string>) {
-  const [imgWidth, imgHeight] = getImageSize("public/page-1.jpg");
+  const [imgWidth, imgHeight] = getImageSize("public/cover.jpg");
   const [owner, repo] = (GITHUB.repository ?? "/").split("/");
   const baseUrl = removeTrailingSlash(
     STEPS.configure?.outputs?.base_path || `/${repo}`,
@@ -100,8 +124,8 @@ function buildSite(pdfInfo: Record<string, string>) {
     VITE_DESCRIPTION: INPUTS.description ?? "",
     VITE_PAGE_NUMBER: pdfInfo.pages,
     VITE_FILE_DOWNLOAD: path.basename(INPUTS.file),
-    VITE_SEO_IMAGE: "page-1.jpg",
-    VITE_SEO_IMAGE_URL: `${fullUrl}/page-1.jpg`,
+    VITE_SEO_IMAGE: "cover.jpg",
+    VITE_SEO_IMAGE_URL: `${fullUrl}/cover.jpg`,
     VITE_SEO_IMAGE_WIDTH: String(imgWidth),
     VITE_SEO_IMAGE_HEIGHT: String(imgHeight),
   };
@@ -132,14 +156,17 @@ function main(): void {
     process.exit(1);
   }
 
-  if (!fs.existsSync("public")) {
-    fs.mkdirSync("public");
-  }
+  mkdir("public");
+  mkdir("public/svg");
+  mkdir("public/jpg");
+
+  console.log("Extracting cover image");
+  extractSEOImage(pdfPath);
 
   for (let page = 1; page <= nrPages; page += 1) {
     console.info("Processing page:", page);
     convertPageToSVG(pdfPath, page);
-    convertPagetoJPG(pdfPath, page);
+    convertPageToJPG(pdfPath, page);
   }
 
   buildSite(pdfInfo);

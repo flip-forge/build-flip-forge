@@ -44,8 +44,7 @@ export default defineComponent({
     pages() {
       const result = [];
       for (let i = 1; i <= this.pageNumber; i += 1) {
-        const pageFile = `page-${i}.svg`;
-        result.push([this.baseUrl, pageFile].join("/"));
+        result.push([this.baseUrl, "svg", `${i}.svg`].join("/"));
       }
       return result;
     },
