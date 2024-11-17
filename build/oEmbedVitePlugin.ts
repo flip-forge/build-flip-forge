@@ -54,8 +54,8 @@ export default function oEmbedVitePlugin(): PluginOption {
     configResolved(config) {
       const style = [
         "border: none",
-        `width: ${config.env.VITE_SEO_IMAGE_WIDTH}`,
-        `height: ${config.env.VITE_SEO_IMAGE_HEIGHT}`,
+        `width: ${config.env.VITE_SEO_IMAGE_WIDTH}px`,
+        `height: ${config.env.VITE_SEO_IMAGE_HEIGHT}px`,
       ].join(";");
       jsonData = {
         type: "rich",
