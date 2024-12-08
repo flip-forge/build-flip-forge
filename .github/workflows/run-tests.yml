@@ -1,0 +1,27 @@
+name: "Run Tests"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+      - uses: ./
+        with:
+          file: test/lorem_ipsum.pdf
+          title: "LOREM IPSUM"
+          backgroundColor: "#000000"
+          toolbarColor: "#ffffff"
+          description: "Test description"
+      - run: npm ci
+      - run: npm run test:e2e
