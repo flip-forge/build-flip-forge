@@ -163,6 +163,8 @@ function main(): void {
   mkdir("public/svg");
   mkdir("public/jpg");
 
+  fs.copyFileSync(pdfPath, path.join("public", path.basename(pdfPath)));
+
   console.log("Extracting cover image");
   extractSEOImage(pdfPath);
 
