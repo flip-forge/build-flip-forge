@@ -19,9 +19,15 @@ jobs:
       - uses: ./
         with:
           file: test/lorem_ipsum.pdf
-          title: "LOREM IPSUM"
+          title: "Lorem Ipsum"
           backgroundColor: "#000000"
           toolbarColor: "#ffffff"
           description: "Test description"
       - run: npm ci
-      - run: npm run test:e2e
+      - id: e2e_tests
+        run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: ${{ failure() && steps.e2e_tests.conclusion == 'failure' }}
+        with:
+          name: screenshots
+          path: cypress/screenshots/
