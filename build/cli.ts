@@ -19,6 +19,10 @@ function main() {
         type: "string",
         default: "",
       },
+      description: {
+        type: "string",
+        default: "",
+      },
     },
   });
 
