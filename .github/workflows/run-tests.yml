@@ -25,7 +25,7 @@ jobs:
           description: "Test description"
       - run: npm ci
       - id: e2e_tests
-        run: npm run test:e2e
+        run: env VITE_BASE_URL="/build-flip-forge" npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: ${{ failure() && steps.e2e_tests.conclusion == 'failure' }}
         with:
