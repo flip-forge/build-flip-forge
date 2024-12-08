@@ -1,6 +1,10 @@
 ## v1.2.0
 
-- Add typescript
+- Add typescript.
+- Use SVG images for high quality images and use lower quality JPG images for
+  a faster initial load.
+- Add initial loading indicator.
+- Add the ability to build from CLI for easier testing.
 
 ## v1.1.0
 
