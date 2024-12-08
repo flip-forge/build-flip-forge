@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "build-action": "tsx ./build/action.ts",
-    "build-test": "tsx ./build/cli.ts --title='Lorem Ipsum' --description='Test description' test/lorem_ipsum.pdf",
+    "build-test": "tsx ./build/cli.ts --title='Lorem Ipsum' --description='Test description' --writeEnv test/lorem_ipsum.pdf",
     "preview": "vite preview",
     "test:unit": "vitest",
     "test:e2e": "start-server-and-test preview http://localhost:4173 'cypress run --e2e'",

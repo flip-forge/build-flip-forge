@@ -11,6 +11,7 @@ export interface BuildOptions {
   backgroundColor?: string;
   toolbarColor?: string;
   description?: string;
+  writeEnv?: boolean;
 }
 
 function mkdir(dirPath: string) {
@@ -107,6 +108,17 @@ function extractSEOImage(pdfPath: string) {
   ]);
 }
 
+function writeEnv(env: Record<string, string>) {
+  const result = [];
+  for (const [key, value] of Object.entries(env)) {
+    const escaped = value.replace(/"/gu, '\\"');
+    result.push(`${key}="${escaped}"`);
+  }
+  // And empty line
+  result.push("");
+  fs.writeFileSync(".env", result.join("\n"));
+}
+
 function buildSite(pdfInfo: Record<string, string>, options: BuildOptions) {
   const [seoImgWidth, seoImgHeight] = getImageSize("public/cover.jpg");
   const [svgImgWidth, svgImgHeight] = getImageSize("public/svg/1.svg");
@@ -127,6 +139,10 @@ function buildSite(pdfInfo: Record<string, string>, options: BuildOptions) {
     VITE_SVG_IMAGE_WIDTH: String(svgImgWidth),
     VITE_SVG_IMAGE_HEIGHT: String(svgImgHeight),
   };
+
+  if (options.writeEnv) {
+    writeEnv(env);
+  }
 
   console.log("Building app with env:", env);
   execCommand(["npm", "run", "build-only"], {
@@ -152,6 +168,10 @@ export function buildFlipForge(options: BuildOptions): void {
       pdfInfo,
     );
     process.exit(1);
+  }
+
+  if (fs.existsSync("public")) {
+    fs.rmSync("public", { force: true, recursive: true });
   }
 
   mkdir("public");

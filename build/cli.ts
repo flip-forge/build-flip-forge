@@ -23,6 +23,10 @@ function main() {
         type: "string",
         default: "",
       },
+      writeEnv: {
+        type: "boolean",
+        default: true,
+      },
     },
   });
 
