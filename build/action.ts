@@ -18,10 +18,10 @@ function main() {
   buildFlipForge({
     pdfPath: path.join(GITHUB.workspace ?? "", INPUTS.file),
     baseUrl: removeTrailingSlash(
-      STEPS.configure?.outputs?.base_path || `/${repo}`,
+      STEPS.configure?.outputs?.base_path ?? `/${repo}`,
     ),
     fullUrl: removeTrailingSlash(
-      STEPS.configure?.outputs?.base_url ||
+      STEPS.configure?.outputs?.base_url ??
         `https://${owner}.github.io/${repo}`,
     ),
     title: INPUTS.title,
