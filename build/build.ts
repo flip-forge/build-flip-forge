@@ -121,7 +121,6 @@ function writeEnv(env: Record<string, string>) {
 
 function buildSite(pdfInfo: Record<string, string>, options: BuildOptions) {
   const [seoImgWidth, seoImgHeight] = getImageSize("public/cover.jpg");
-  const [svgImgWidth, svgImgHeight] = getImageSize("public/svg/1.svg");
 
   const env = {
     VITE_BASE_URL: options.baseUrl,
@@ -136,8 +135,8 @@ function buildSite(pdfInfo: Record<string, string>, options: BuildOptions) {
     VITE_SEO_IMAGE_URL: `${options.fullUrl}/cover.jpg`,
     VITE_SEO_IMAGE_WIDTH: String(seoImgWidth),
     VITE_SEO_IMAGE_HEIGHT: String(seoImgHeight),
-    VITE_SVG_IMAGE_WIDTH: String(svgImgWidth),
-    VITE_SVG_IMAGE_HEIGHT: String(svgImgHeight),
+    VITE_SVG_IMAGE_WIDTH: String(seoImgWidth),
+    VITE_SVG_IMAGE_HEIGHT: String(seoImgHeight),
   };
 
   if (options.writeEnv) {

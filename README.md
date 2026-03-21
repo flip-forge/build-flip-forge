@@ -51,6 +51,7 @@ Requirements:
 
 - node (>=20)
 - poppler-utils
+- imagemagick
 
 Steps to setup the project for developing/contributing:
 
