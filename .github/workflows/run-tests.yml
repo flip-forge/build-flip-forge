@@ -12,10 +12,10 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: "20.x"
+          node-version: "24.x"
       - uses: ./
         with:
           file: test/lorem_ipsum.pdf
@@ -26,7 +26,7 @@ jobs:
       - run: npm ci
       - id: e2e_tests
         run: env VITE_BASE_URL="/build-flip-forge" npm run test:e2e
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: ${{ failure() && steps.e2e_tests.conclusion == 'failure' }}
         with:
           name: screenshots-and-build

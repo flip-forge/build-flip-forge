@@ -14,7 +14,7 @@
 import { defineComponent } from "vue";
 import { useRouteQuery } from "@vueuse/router";
 import FlipForge, { type FlipForgeOptions } from "@flip-forge/vue-flip-forge";
-import "@flip-forge/vue-flip-forge/dist/style.css";
+import "@flip-forge/vue-flip-forge/dist/vue-flip-forge.css";
 
 export default defineComponent({
   components: { FlipForge },
